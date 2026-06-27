@@ -120,8 +120,8 @@ function App() {
 
     try {
       const res = await axios.post(`${API_BASE}/chat`, {
-        message: userMessage,
-      });
+  question: userMessage,
+});
 
       const botMessage = {
         role: "bot",
