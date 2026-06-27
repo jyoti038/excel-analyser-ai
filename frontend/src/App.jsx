@@ -4,7 +4,7 @@ import "./App.css";
 
 const STORAGE_KEY = "excel-ai-chatbot-chats";
 const ACTIVE_CHAT_KEY = "excel-ai-chatbot-active-chat";
-const API_BASE = "https://botforexcel.onrender.com";
+const API_BASE = "https://excel-analyser-ai.onrender.com";
 
 function App() {
   const [file, setFile] = useState(null);
