@@ -67,6 +67,8 @@ class ChatRequest(BaseModel):
 
 # ---------------- Chat API ---------------- #
 
+from fastapi import HTTPException
+
 @app.post("/chat")
 async def chat(data: ChatRequest):
     global uploaded_df
@@ -76,11 +78,8 @@ async def chat(data: ChatRequest):
             "answer": "Please upload an Excel file first."
         }
 
-    answer = ask_dataframe(uploaded_df, data.question)
-
-   
-
     excel_data = uploaded_df.head(100).to_json(orient="records", indent=2)
+
     prompt = f"""
 You are an expert Excel Data Analyst.
 
@@ -102,8 +101,13 @@ Instructions:
   "The uploaded Excel does not contain this information."
 """
 
-    answer = ask_gemini(prompt)
+    try:
+        answer = ask_gemini(prompt)
+        return {"answer": answer}
 
-    return {
-        "answer": answer
-    }
+    except Exception as e:
+        print(f"Gemini Error: {e}")
+        raise HTTPException(
+            status_code=429,
+            detail="Gemini API quota exceeded. Please try again later."
+        )
